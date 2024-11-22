@@ -1,3 +1,4 @@
+import 'package:clipit_front/screens/show_message.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,28 +16,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const TitleScreen(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      ),
-      body: const Center(
-        child: Text(
-          'Hello, World!',
-          style: TextStyle(fontSize: 24,),
-        ),
-      ),
     );
   }
 }
