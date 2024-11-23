@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:clipit_front/components/footer.dart';
-import 'package:clipit_front/screens/ranking_page.dart';
-import 'package:clipit_front/screens/result_page.dart';
-import 'package:clipit_front/screens/select_topics_page.dart';
-import 'package:clipit_front/screens/show_message.dart';
 
 void main() {
   runApp(const MyApp());
