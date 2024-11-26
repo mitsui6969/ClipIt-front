@@ -14,7 +14,7 @@ class _TitleScreenState extends State<TitleScreen> {
 
   // 初期データを取得する関数
   Future<void> fetchInitialData() async {
-    final url = Uri.parse("https://clipit-backend.onrender.com/");
+    final url = Uri.parse('https://clipit-backend.onrender.com/');
 
     try {
       final response = await http.get(url);

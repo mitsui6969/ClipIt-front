@@ -1,3 +1,4 @@
+import 'package:clipit_front/models/ranking.dart';
 import 'package:flutter/material.dart';
 import 'package:clipit_front/screens/ranking_page.dart';
 import 'package:clipit_front/screens/result_page.dart';
@@ -14,13 +15,26 @@ class Footer extends StatefulWidget {
 class _FooterState extends State<Footer> {
   int _selectedIndex = 0;
 
+  final defaultRanking = Ranking(
+    rank: 1,
+    similarity: 50.5,
+    image_url: '',
+    theme_name: 'default theme'
+  );
+
   // 画面リスト
-  static final List<Widget> _pages = [
-    const SelectTopicsPage(),
-    const RankingPage(),
-    const ResultPage(),
-    const TitleScreen(),
+  late final List<Widget> _pages;
+  
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      const SelectTopicsPage(),
+      RankingPage(ranking: defaultRanking),
+      const ResultPage(),
+      const TitleScreen(),
   ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {

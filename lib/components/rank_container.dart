@@ -1,7 +1,13 @@
+import 'package:clipit_front/models/ranking.dart';
 import 'package:flutter/material.dart';
 
 class RankContainer extends StatelessWidget {
-  const RankContainer({super.key});
+  const RankContainer({
+    super.key,
+    required this.ranking,
+  });
+
+  final Ranking ranking;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +29,27 @@ class RankContainer extends StatelessWidget {
           ),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("rank"),
-                Text("一致度")
+                Text(
+                  "${ranking.rank}位",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffffffff)
+                  ),
+                ),
+                Text(
+                  "一致度: ${ranking.similarity}%",
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xffffffff)
+                  ),
+                )
               ],
             ),
             // 画像部分
@@ -36,10 +58,17 @@ class RankContainer extends StatelessWidget {
               // padding: const EdgeInsets.symmetric(
               //   vertical: 80,
               // ),
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 109, 232, 218),
-                borderRadius: BorderRadius.all(
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: const BorderRadius.all(
                   Radius.circular(5)
+                ),
+                image: DecorationImage(
+                  image: NetworkImage(ranking.image_url),
+                  fit: BoxFit.cover,
+                  onError: (error, StackTrace) {
+                    const Text("alt");
+                  }
                 )
               ),
             )
