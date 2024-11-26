@@ -28,6 +28,12 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>画像選択のためのアクセス許可が必要です。</string>
+	<key>NSCameraUsageDescription</key>
+	<string>カメラの使用許可が必要です。</string>
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
