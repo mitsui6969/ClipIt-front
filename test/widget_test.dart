@@ -30,7 +30,7 @@ void main() {
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
   // ウィジェットをテスト環境にロード
-  await tester.pumpWidget(const MyApp());
+  await tester.pumpWidget(const ClipItApp());
 
   // // 初期状態で 'Hello, World!' を含む Text ウィジェットが表示されていることを確認
   // expect(find.text('Hello, World!'), findsOneWidget);
