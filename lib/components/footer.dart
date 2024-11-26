@@ -1,4 +1,3 @@
-import 'package:clipit_front/models/ranking.dart';
 import 'package:flutter/material.dart';
 import 'package:clipit_front/screens/ranking_page.dart';
 import 'package:clipit_front/screens/result_page.dart';
