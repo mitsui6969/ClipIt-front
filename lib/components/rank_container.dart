@@ -64,7 +64,7 @@ class RankContainer extends StatelessWidget {
                   Radius.circular(5)
                 ),
                 image: DecorationImage(
-                  image: NetworkImage(ranking.image_url),
+                  image: AssetImage('imgaes/image.png'),
                   fit: BoxFit.cover,
                   onError: (error, StackTrace) {
                     const Text("alt");

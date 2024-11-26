@@ -15,12 +15,13 @@ class Footer extends StatefulWidget {
 class _FooterState extends State<Footer> {
   int _selectedIndex = 0;
 
-  final defaultRanking = Ranking(
-    rank: 1,
-    similarity: 50.5,
-    image_url: '',
-    theme_name: 'default theme'
-  );
+  // final defaultRanking = Ranking(
+  //   rank: 0,
+  //   similarity: 0.0,
+  //   // image_url: '',
+  //   image_id: 0000,
+  //   // theme_name: 'none theme'
+  // );
 
   // 画面リスト
   late final List<Widget> _pages;
@@ -30,7 +31,7 @@ class _FooterState extends State<Footer> {
     super.initState();
     _pages = [
       const SelectTopicsPage(),
-      RankingPage(ranking: defaultRanking),
+      const RankingPage(),
       const ResultPage(),
       const TitleScreen(),
   ];
