@@ -28,7 +28,6 @@ class SelectTopicsPage extends StatelessWidget {
               hintText: '検索ワードを入力してください',
             ),
             onSubmitted: (String value) async {
-              print("検索ワード: $value");
             },
             ),
           ),

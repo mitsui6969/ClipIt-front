@@ -27,7 +27,6 @@ class _RankingPageState extends State<RankingPage> {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         final List<dynamic> body = jsonDecode(response.body)['results'];
-        print(response.body);
         setState(() {
           ranking = body.map((json) => Ranking.fromJson(json)).toList();
           isLoading = false;
