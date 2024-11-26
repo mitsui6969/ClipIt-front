@@ -1,7 +1,11 @@
+import 'package:clipit_front/components/rank_container.dart';
 import 'package:flutter/material.dart';
 
 class RankingPage extends StatelessWidget {
-  const RankingPage({super.key});
+  const RankingPage({
+    super.key,
+    required 
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -9,8 +13,13 @@ class RankingPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ranking'),
       ),
-      body: const Center(
-        child: Text('Ranking Page', style: TextStyle(fontSize: 24)),
+      body: const Column(
+        children: [
+          Text('Ranking Page', style: TextStyle(fontSize: 24)),
+          RankContainer(
+            
+          )
+        ],
       ),
     );
   }
