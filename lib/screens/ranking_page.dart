@@ -28,10 +28,10 @@ class _RankingPageState extends State<RankingPage> {
 
   // ギャラリーから画像を選択する関数
   Future<void> _selectImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
+    if (pickedFile != null && mounted) {
       setState(() {
         selectedImage = pickedFile; // 選択した画像を保持
       });
