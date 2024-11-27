@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "441211470185",
+    "project_id": "clipit-2e405",
+    "storage_bucket": "clipit-2e405.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441211470185:android:82511bb71668135d5f3df8",
+        "android_client_info": {
+          "package_name": "com.example.clipitFront"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBy0f04BrEAjOqWBTSa8oNExTpxJmHxsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441211470185:android:b5003d23eeb23dbc5f3df8",
+        "android_client_info": {
+          "package_name": "com.example.clipit_front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBy0f04BrEAjOqWBTSa8oNExTpxJmHxsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
