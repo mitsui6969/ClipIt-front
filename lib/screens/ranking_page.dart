@@ -34,11 +34,12 @@ class _RankingPageState extends State<RankingPage> {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         final List<dynamic> body = jsonDecode(response.body)['results'];
+        print("レスポンス1 body: ${response.body}");
         setState(() {
           ranking = body.map((json) => Ranking.fromJson(json)).toList();
           isLoading = false;
         });
-        print("レスポンス body: ${response.body}");
+        print("レスポンス2 body: ${response.body}");
       } else {
         throw Exception('ランキングデータの取得に失敗しました: ${response.statusCode}');
       }
@@ -71,7 +72,7 @@ class _RankingPageState extends State<RankingPage> {
 
     request.files.add(await http.MultipartFile.fromPath('file', selectedImage!.path));
 
-    // request.fields['theme_id'] = '1';
+    request.fields['theme_id'] = '1';
 
     try {
       var response = await request.send();
