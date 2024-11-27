@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:clipit_front/screens/ranking_page.dart';
-import 'package:clipit_front/screens/result_page.dart';
 import 'package:clipit_front/screens/select_topics_page.dart';
 import 'package:clipit_front/screens/show_message.dart';
 
@@ -14,14 +13,6 @@ class Footer extends StatefulWidget {
 class _FooterState extends State<Footer> {
   int _selectedIndex = 0;
 
-  // final defaultRanking = Ranking(
-  //   rank: 0,
-  //   similarity: 0.0,
-  //   // image_url: '',
-  //   image_id: 0000,
-  //   // theme_name: 'none theme'
-  // );
-
   // 画面リスト
   late final List<Widget> _pages;
   
@@ -31,7 +22,7 @@ class _FooterState extends State<Footer> {
     _pages = [
       const SelectTopicsPage(),
       const RankingPage(),
-      const ResultPage(),
+      // const ResultPage(),
       const TitleScreen(),
   ];
   }

@@ -59,15 +59,17 @@ class RankContainer extends StatelessWidget {
               //   vertical: 80,
               // ),
               decoration: BoxDecoration(
-                color: const Color(0xffffffff),
+                // color: const Color(0xffffffff),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(5)
                 ),
                 image: DecorationImage(
-                  image: const AssetImage('imgaes/image.png'),
+                  image: ranking.img_url?.isNotEmpty ?? false
+                      ? NetworkImage(ranking.img_url!)
+                      : const AssetImage('images/image.png') as ImageProvider,
                   fit: BoxFit.cover,
                   onError: (error, StackTraces) {
-                    const Text("alt");
+                    // print("Error loading image: $error");
                   }
                 )
               ),
