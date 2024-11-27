@@ -66,10 +66,10 @@ class RankContainer extends StatelessWidget {
                 image: DecorationImage(
                   image: ranking.img_url?.isNotEmpty ?? false
                       ? NetworkImage(ranking.img_url!)
-                      : AssetImage('images/image.png') as ImageProvider,
+                      : const AssetImage('images/image.png') as ImageProvider,
                   fit: BoxFit.cover,
                   onError: (error, StackTraces) {
-                    print("Error loading image: $error");
+                    // print("Error loading image: $error");
                   }
                 )
               ),

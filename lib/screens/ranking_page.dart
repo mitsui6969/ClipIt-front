@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:clipit_front/models/uploadImage.dart';
 import 'package:clipit_front/screens/result_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart'; // 画像選択用
 import 'package:clipit_front/components/rank_container.dart'; // カスタムコンポーネント
@@ -34,12 +32,11 @@ class _RankingPageState extends State<RankingPage> {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         final List<dynamic> body = jsonDecode(response.body)['results'];
-        print("レスポンス1 body: ${response.body}");
+        // print("レスポンス1 body: ${response.body}");
         setState(() {
           ranking = body.map((json) => Ranking.fromJson(json)).toList();
           isLoading = false;
         });
-        print("レスポンス2 body: ${response.body}");
       } else {
         throw Exception('ランキングデータの取得に失敗しました: ${response.statusCode}');
       }
@@ -78,7 +75,7 @@ class _RankingPageState extends State<RankingPage> {
       var response = await request.send();
       if (response.statusCode == 200) {
         final responseBody = await http.Response.fromStream(response);
-        print(jsonDecode(responseBody.body));
+        // print(jsonDecode(responseBody.body));
         return jsonDecode(responseBody.body);
       } else {
         throw Exception('画像のアップロードに失敗しました: ${response.statusCode}');
@@ -134,15 +131,16 @@ class _RankingPageState extends State<RankingPage> {
                     onPressed: () async {
                       final response = await uploadImage();
                       if (response != null && mounted) {
-                        Navigator.push(
+                        if (context.mounted) {
+                          Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ResultPage(
                               image: File(selectedImage!.path),
                               serverResponse: response,
                             )
-                          ),
-                        );
+                          ),);
+                        }
                       }
                     }, 
                     child: const Text("結果を見る"),
