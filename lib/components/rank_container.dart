@@ -23,7 +23,7 @@ class RankContainer extends StatelessWidget {
           horizontal: 20,
         ),
         decoration: const BoxDecoration(
-          color: Color(0xFF55C500),
+          color: Color(0xFF6cb1c9),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
@@ -39,7 +39,7 @@ class RankContainer extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)
+                    color: Color(0xFFf0f0f0)
                   ),
                 ),
                 Text(
@@ -47,7 +47,7 @@ class RankContainer extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xffffffff)
+                    color: Color(0xFFf0f0f0)
                   ),
                 )
               ],
