@@ -1,9 +1,48 @@
+import 'package:clipit_front/components/topic_container.dart';
+import 'package:clipit_front/models/topic.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
 
-class SelectTopicsPage extends StatelessWidget {
+class SelectTopicsPage extends StatefulWidget {
   const SelectTopicsPage({super.key});
+
+  @override
+  State<SelectTopicsPage> createState() => _SelectTopicsPageState();
+}
+
+class _SelectTopicsPageState extends State<SelectTopicsPage> {
+  List<Topic> topics = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchTopics();
+  }
+
+  // お題データを取得
+  Future<void> fetchTopics() async {
+    final uri = Uri.parse('https://clipit-backend.onrender.com/theme');
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final List<dynamic> body = jsonDecode(response.body)['results'];
+        setState(() {
+          topics = body.map((json) => Topic.fromJson(json)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('お題データの取得に失敗しました: ${response.statusCode}');
+      }
+    } catch (error) {
+      debugPrint('Error fetching rankings: $error');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +67,21 @@ class SelectTopicsPage extends StatelessWidget {
               hintText: '検索ワードを入力してください',
             ),
             onSubmitted: (String value) async {
+              // ここに検索処理
             },
             ),
+          ),
+
+          // お題情報
+          Expanded (
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: topics.length,
+                    itemBuilder: (context, index) {
+                      return TopicContainer(topic: topics[index]);
+                    },
+                  ),
           ),
         ],
       ),
