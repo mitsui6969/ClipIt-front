@@ -14,6 +14,7 @@ class SelectTopicsPage extends StatefulWidget {
 
 class _SelectTopicsPageState extends State<SelectTopicsPage> {
   List<Topic> topics = [];
+  List<Topic> filteredTopics = []; // 検索用
   bool isLoading = true;
 
   @override
@@ -31,6 +32,7 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
         final List<dynamic> body = jsonDecode(response.body)['results'];
         setState(() {
           topics = body.map((json) => Topic.fromJson(json)).toList();
+          filteredTopics = topics;
           isLoading = false;
         });
       } else {
@@ -43,6 +45,20 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
       });
     }
   }
+
+  // 検索処理
+  void searchTopics(String keyword) {
+    setState(() {
+      if (keyword.isEmpty) {
+        return;
+      } else {
+        filteredTopics = topics
+          .where((topic) => topic.theme_name.toLowerCase().contains(keyword.toLowerCase()))
+          .toList();
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +83,7 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
               hintText: '検索ワードを入力してください',
             ),
             onSubmitted: (String value) async {
-              // ここに検索処理
+              searchTopics(value);
             },
             ),
           ),
@@ -76,7 +92,9 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
           Expanded (
             child: isLoading
                 ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
+                : filteredTopics.isEmpty
+                  ? const Center(child: Text('お題が見つかりませんでした'),)
+                  : ListView.builder(
                     itemCount: topics.length,
                     itemBuilder: (context, index) {
                       return TopicContainer(topic: topics[index]);
