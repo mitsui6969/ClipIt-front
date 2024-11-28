@@ -69,7 +69,8 @@ class _RankingPageState extends State<RankingPage> {
     if (_selectedImage != null) {
       try {
         final File file = File(_selectedImage!.path);
-        final String fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
+        final int imageId = DateTime.now().millisecondsSinceEpoch;
+        final String fileName = '$imageId.png';
         final ref = _storage.ref().child(fileName);
         final uploadFile = await ref.putFile(file);
 
@@ -77,7 +78,7 @@ class _RankingPageState extends State<RankingPage> {
           final imgUrl = await ref.getDownloadURL();
           debugPrint('アップロード成功: $imgUrl');
 
-          final response = await sendImageDataToBackend(imgUrl, themeId);
+          final response = await sendImageDataToBackend(imageId, themeId);
           if (response != null) {
             if (!mounted) return;
             Navigator.push(
@@ -100,14 +101,15 @@ class _RankingPageState extends State<RankingPage> {
   }
 
   // バックエンドに画像データを送信
-  Future<Map<String, dynamic>?> sendImageDataToBackend(String imageUrl, int themeId) async {
+  Future<Map<String, dynamic>?> sendImageDataToBackend(int imageId, int themeId) async {
     final uri = Uri.parse('https://clipit-backend.onrender.com/upload');
     try {
       final response = await http.post(
         uri,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'image_url': imageUrl, 'theme_id': themeId}),
+        body: jsonEncode({'image_url': imageId, 'theme_id': themeId}),
       );
+      print('送信データ: ${jsonDecode(response.body)}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);

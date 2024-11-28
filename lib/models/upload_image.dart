@@ -3,17 +3,17 @@ import 'dart:io';
 class Uploadimage {
   // コンストラクタ
   Uploadimage({
-    required this.img_data,
+    required this.image_id,
     required this.theme_id,
   });
 
   // プロパティ
-  final File img_data;
+  final int image_id;
   final int theme_id;
 
   // JSON生成するファクトリコンストラクタ
   Map<String, dynamic> toJson() => {
-    'img_data': img_data,
+    'img_data': image_id,
     'theme_id': theme_id,
   };
 }
