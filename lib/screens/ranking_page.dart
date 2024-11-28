@@ -79,6 +79,7 @@ class _RankingPageState extends State<RankingPage> {
 
           final response = await sendImageDataToBackend(imgUrl, themeId);
           if (response != null) {
+            if (!mounted) return;
             Navigator.push(
               context,
               MaterialPageRoute(
