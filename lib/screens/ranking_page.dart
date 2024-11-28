@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:clipit_front/screens/result_page.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart'; // 画像選択用
-import 'package:clipit_front/components/rank_container.dart'; // カスタムコンポーネント
-import 'package:clipit_front/models/ranking.dart'; // モデルクラス
+import 'package:image_picker/image_picker.dart';
+import 'package:clipit_front/components/rank_container.dart';
+import 'package:clipit_front/models/ranking.dart';
 
 class RankingPage extends StatefulWidget {
   const RankingPage({super.key});
@@ -15,24 +16,26 @@ class RankingPage extends StatefulWidget {
 }
 
 class _RankingPageState extends State<RankingPage> {
-  List<Ranking> ranking = []; // APIから取得したランキングデータ
-  bool isLoading = true; // ローディング状態管理
-  XFile? selectedImage; // 選択された画像を保持
+  List<Ranking> ranking = [];
+  bool isLoading = true;
+  XFile? _selectedImage;
+  int themeId = 1;
+
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   void initState() {
     super.initState();
-    fetchRanking(1); // APIからテーマIDに基づくランキング情報を取得
+    fetchRanking(themeId);
   }
 
   // ランキングデータを取得
   Future<void> fetchRanking(int themeId) async {
-    final uri = Uri.parse('https://clipit-backend.onrender.com/ranking_$themeId'); // APIのURL
+    final uri = Uri.parse('https://clipit-backend.onrender.com/ranking_$themeId');
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         final List<dynamic> body = jsonDecode(response.body)['results'];
-        // print("レスポンス1 body: ${response.body}");
         setState(() {
           ranking = body.map((json) => Ranking.fromJson(json)).toList();
           isLoading = false;
@@ -41,53 +44,116 @@ class _RankingPageState extends State<RankingPage> {
         throw Exception('ランキングデータの取得に失敗しました: ${response.statusCode}');
       }
     } catch (error) {
+      debugPrint('Error fetching rankings: $error');
       setState(() {
         isLoading = false;
       });
-      debugPrint('Error fetching rankings: $error');
     }
   }
 
   // ギャラリーから画像を選択する関数
   Future<void> _selectImage() async {
-    final ImagePicker picker = ImagePicker();
+    final picker = ImagePicker();
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null && mounted) {
       setState(() {
-        selectedImage = pickedFile; // 選択した画像を保持
+        _selectedImage = pickedFile;
       });
-      _showModal(context); // モーダルを表示
+      _showModal(context);
     }
   }
 
-
   // 画像アップロード
-  Future<Map<String, dynamic>?> uploadImage() async {
+  Future<void> uploadImage() async {
+    if (_selectedImage != null) {
+      try {
+        final File file = File(_selectedImage!.path);
+        final String fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
+        final ref = _storage.ref().child(fileName);
+        final uploadFile = await ref.putFile(file);
+
+        if (uploadFile.state == TaskState.success) {
+          final imgUrl = await ref.getDownloadURL();
+          debugPrint('アップロード成功: $imgUrl');
+
+          final response = await sendImageDataToBackend(imgUrl, themeId);
+          if (response != null) {
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResultPage(
+                  image: file,
+                  serverResponse: response,
+                ),
+              ),
+            );
+          }
+        } else {
+          throw Exception('画像アップロード中にエラーが発生しました');
+        }
+      } catch (e) {
+        debugPrint('エラー: $e');
+      }
+    }
+  }
+
+  // バックエンドに画像データを送信
+  Future<Map<String, dynamic>?> sendImageDataToBackend(String imageUrl, int themeId) async {
     final uri = Uri.parse('https://clipit-backend.onrender.com/upload');
-    var request = http.MultipartRequest('POST', uri);
-
-    request.files.add(await http.MultipartFile.fromPath('file', selectedImage!.path));
-
-    request.fields['theme_id'] = '1';
-
     try {
-      var response = await request.send();
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'image_url': imageUrl, 'theme_id': themeId}),
+      );
+
       if (response.statusCode == 200) {
-        final responseBody = await http.Response.fromStream(response);
-        // print(jsonDecode(responseBody.body));
-        return jsonDecode(responseBody.body);
+        return jsonDecode(response.body);
       } else {
-        throw Exception('画像のアップロードに失敗しました: ${response.statusCode}');
+        throw Exception('バックエンド通信中にエラーが発生しました: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint('エラー: $e');
+      return null;
     }
-    return null;
   }
 
+  // モーダルウィンドウ
+  void _showModal(BuildContext context) {
+    if (_selectedImage != null) {
+      showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 600,
+            child: Column(
+              children: [
+                Image.file(
+                  File(_selectedImage!.path),
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 20),
+                Text('ファイル名: ${_selectedImage!.name}'),
+                ElevatedButton(
+                  onPressed: uploadImage,
+                  child: const Text("結果を見る"),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("閉じる"),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+  }
 
-  // ランキング画面
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,60 +167,9 @@ class _RankingPageState extends State<RankingPage> {
               },
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _selectImage, // ボタンを押したら画像選択を開始
+        onPressed: _selectImage,
         child: const Icon(Icons.upload_file),
       ),
     );
-  }
-
-
-  // 画像選択後のモーダルウィンドウ
-  void _showModal(BuildContext context) {
-    if (selectedImage != null) {
-      showModalBottomSheet<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return SizedBox(
-            height: 600,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.file(
-                    File(selectedImage!.path), // 選択した画像を表示
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(height: 20),
-                  Text('ファイル名: ${selectedImage!.name}'),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final response = await uploadImage();
-                      if (response != null && mounted) {
-                        if (context.mounted) {
-                          Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ResultPage(
-                              image: File(selectedImage!.path),
-                              serverResponse: response,
-                            )
-                          ),);
-                        }
-                      }
-                    }, 
-                    child: const Text("結果を見る"),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("Close"),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    }
   }
 }
