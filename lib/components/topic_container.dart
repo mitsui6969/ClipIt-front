@@ -1,4 +1,3 @@
-import 'package:clipit_front/models/ranking.dart';
 import 'package:clipit_front/models/topic.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +29,6 @@ class TopicContainer extends StatelessWidget {
           children: [
             // お題
             Container(
-              child: Text(topic.theme_name),
               height: 40,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(
@@ -43,6 +41,7 @@ class TopicContainer extends StatelessWidget {
                   top: Radius.circular(5),
                 ),
               ),
+              child: Text(topic.theme_name),
             ),
             
             // 画像部分
@@ -58,7 +57,7 @@ class TopicContainer extends StatelessWidget {
                   topic.img_url,
                   fit: BoxFit.cover,
                   width: double.infinity,
-                  errorBuilder: (context, error, StackTrace) {
+                  errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
                       'images/image.png',
                       fit: BoxFit.cover,

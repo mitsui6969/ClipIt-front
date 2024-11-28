@@ -4,7 +4,6 @@ import 'package:clipit_front/screens/ranking_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io';
 
 class SelectTopicsPage extends StatefulWidget {
   const SelectTopicsPage({super.key});
