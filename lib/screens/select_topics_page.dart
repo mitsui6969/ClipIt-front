@@ -1,5 +1,6 @@
 import 'package:clipit_front/components/topic_container.dart';
 import 'package:clipit_front/models/topic.dart';
+import 'package:clipit_front/screens/ranking_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -95,9 +96,20 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
                 : filteredTopics.isEmpty
                   ? const Center(child: Text('お題が見つかりませんでした'),)
                   : ListView.builder(
-                    itemCount: topics.length,
+                    itemCount: filteredTopics.length,
                     itemBuilder: (context, index) {
-                      return TopicContainer(topic: topics[index]);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                RankingPage(themeId: filteredTopics[index].theme_id),
+                            )
+                          );
+                        },
+                        child: TopicContainer(topic: filteredTopics[index]),
+                      );
                     },
                   ),
           ),

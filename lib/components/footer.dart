@@ -21,7 +21,7 @@ class _FooterState extends State<Footer> {
     super.initState();
     _pages = [
       const SelectTopicsPage(),
-      const RankingPage(),
+      // const RankingPage(),
       // const ResultPage(),
       const TitleScreen(),
   ];
