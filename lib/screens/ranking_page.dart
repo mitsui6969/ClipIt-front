@@ -109,7 +109,7 @@ class _RankingPageState extends State<RankingPage> {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'image_url': imageId, 'theme_id': themeId}),
       );
-      print('送信データ: ${jsonDecode(response.body)}');
+      // print('送信データ: ${jsonDecode(response.body)}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
