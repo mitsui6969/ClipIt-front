@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clipit_front/screens/ranking_page.dart';
+// import 'package:clipit_front/screens/ranking_page.dart';
 import 'package:clipit_front/screens/select_topics_page.dart';
 import 'package:clipit_front/screens/show_message.dart';
 
@@ -21,7 +21,7 @@ class _FooterState extends State<Footer> {
     super.initState();
     _pages = [
       const SelectTopicsPage(),
-      const RankingPage(),
+      // const RankingPage(),
       // const ResultPage(),
       const TitleScreen(),
   ];

@@ -9,7 +9,9 @@ import 'package:clipit_front/components/rank_container.dart';
 import 'package:clipit_front/models/ranking.dart';
 
 class RankingPage extends StatefulWidget {
-  const RankingPage({super.key});
+  final int themeId;
+
+  const RankingPage({super.key, required this.themeId});
 
   @override
   State<RankingPage> createState() => _RankingPageState();
@@ -19,14 +21,14 @@ class _RankingPageState extends State<RankingPage> {
   List<Ranking> ranking = [];
   bool isLoading = true;
   XFile? _selectedImage;
-  int themeId = 1;
+  // int themeId = 1;
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   void initState() {
     super.initState();
-    fetchRanking(themeId);
+    fetchRanking(widget.themeId);
   }
 
   // ランキングデータを取得
@@ -78,7 +80,7 @@ class _RankingPageState extends State<RankingPage> {
           final imgUrl = await ref.getDownloadURL();
           debugPrint('アップロード成功: $imgUrl');
 
-          final response = await sendImageDataToBackend(imageId, themeId);
+          final response = await sendImageDataToBackend(imageId, widget.themeId);
           if (response != null) {
             if (!mounted) return;
             Navigator.push(
