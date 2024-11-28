@@ -51,7 +51,7 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
   void searchTopics(String keyword) {
     setState(() {
       if (keyword.isEmpty) {
-        return;
+        filteredTopics = topics;
       } else {
         filteredTopics = topics
           .where((topic) => topic.theme_name.toLowerCase().contains(keyword.toLowerCase()))
