@@ -65,62 +65,87 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // title
       appBar: AppBar(
-        title: const Text('Select Topics'),
-      ),
-      body: Column(
-        children: [
-           // 検索ボックス
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 36,
-            ),
-            child: TextField(
-              style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
-            ),
-            decoration: const InputDecoration(
-              hintText: '検索ワードを入力してください',
-            ),
-            onSubmitted: (String value) async {
-              searchTopics(value);
-            },
-            ),
+        toolbarHeight: 60,
+        title: const Text(
+          'Select Topics',
+          style: TextStyle(
+            color: Color(0xffffffff),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
           ),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFFAB800),
+          ),
+        ),
+      ),
 
-          // お題情報
-          Expanded (
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : filteredTopics.isEmpty
-                  ? const Center(child: Text('お題が見つかりませんでした'),)
-                  : ListView.builder(
-                    itemCount: filteredTopics.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                RankingPage(
-                                  themeId: filteredTopics[index].theme_id,
-                                  themeName: filteredTopics[index].theme_name
-                                ),
-                            )
+      backgroundColor: const Color(0xFFFAB800),
+      body: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+        
+        child: Container(
+          color: const Color(0xFFffffff),
+          child: Column(
+            children: [
+              // 検索ボックス
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 22,
+                  horizontal: 36,
+                ),
+                child: TextField(
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                decoration: const InputDecoration(
+                  hintText: 'keyword...',
+                ),
+                onSubmitted: (String value) async {
+                  searchTopics(value);
+                },
+                ),
+              ),
+
+              // お題情報
+              Expanded (
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : filteredTopics.isEmpty
+                      ? const Center(child: Text('お題が見つかりませんでした'),)
+                      : ListView.builder(
+                        itemCount: filteredTopics.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                    RankingPage(
+                                      themeId: filteredTopics[index].theme_id,
+                                      themeName: filteredTopics[index].theme_name
+                                    ),
+                                )
+                              );
+                            },
+                            child: TopicContainer(
+                              topic: filteredTopics[index],
+                            ),
                           );
                         },
-                        child: TopicContainer(
-                          topic: filteredTopics[index],
-                        ),
-                      );
-                    },
-                  ),
+                      ),
+              ),
+            ],        
           ),
-        ],
-      ),
-    );
+        )
+        
+    ));
   }
 }

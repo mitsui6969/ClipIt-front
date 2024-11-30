@@ -174,50 +174,114 @@ class _RankingPageState extends State<RankingPage> {
       showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
-          return SizedBox(
-            height: 600,
-            child: Column(
-              children: [
-                Image.file(
-                  File(_selectedImage!.path),
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.cover,
+          bool isUploading = false;
+
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter modalSetState) {
+              return SizedBox(
+                height: 600,
+                child: Column(
+                  children: [
+                    // 画像のプレビュー
+                    Image.file(
+                      File(_selectedImage!.path),
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // 結果を見るボタン
+                    ElevatedButton(
+                      onPressed: isUploading
+                          ? null
+                          : () async {
+                              modalSetState(() {
+                                isUploading = true; // ローディング開始
+                              });
+
+                              await uploadImage();
+
+                              modalSetState(() {
+                                isUploading = false; // ローディング終了
+                              });
+                            },
+                      child: isUploading
+                          ? const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text("処理中..."),
+                              ],
+                            )
+                          : const Text("結果を見る"),
+                    ),
+
+                    // 閉じるボタン
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("閉じる"),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Text('ファイル名: ${_selectedImage!.name}'),
-                ElevatedButton(
-                  onPressed: uploadImage,
-                  child: const Text("結果を見る"),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("閉じる"),
-                ),
-              ],
-            ),
+              );
+            },
           );
         },
       );
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.themeName)),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: ranking.length,
-              itemBuilder: (context, index) {
-                return RankContainer(ranking: ranking[index]);
-              },
-            ),
+      appBar: AppBar(
+        toolbarHeight: 60,
+        title: const Text(
+          'Select Topics',
+          style: TextStyle(
+            color: Color(0xffffffff),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFFAB800),
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFFFAB800),
+      body: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+        child: Container(
+          color: Colors.white,
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: ranking.length,
+                  itemBuilder: (context, index) {
+                    return RankContainer(ranking: ranking[index]);
+                  },
+                ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _selectImage,
         child: const Icon(Icons.upload_file),
       ),
     );
   }
+
 }
