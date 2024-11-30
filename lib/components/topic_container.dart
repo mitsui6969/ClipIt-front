@@ -13,15 +13,15 @@ class TopicContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 12,
-        horizontal: 16,
+        vertical: 15,
+        horizontal: 30,
       ),
       child: Container(
-        height: 220,
+        height: 230,
         decoration: const BoxDecoration(
-          color: Color(0xFFf0f0f0),
+          color: Color(0xFFFAB800),
           borderRadius: BorderRadius.all(
-            Radius.circular(5),
+            Radius.circular(15),
           ),
         ),
         child: Column(
@@ -36,7 +36,7 @@ class TopicContainer extends StatelessWidget {
                 horizontal: 15
               ),
               decoration: const BoxDecoration(
-                color: Color(0xFFFAB800),
+                // color: Color(0xFFFAB800),
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(5),
                 ),
@@ -47,12 +47,19 @@ class TopicContainer extends StatelessWidget {
             // 画像部分
             Container(
               height: 170,
+              padding: const EdgeInsets.symmetric(
+                // vertical: 15,
+                horizontal: 10,
+              ),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(
-                  Radius.circular(5)
+                  Radius.circular(10)
                 ),
               ),
               child: ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
                 child: Image.network(
                   topic.image_url,
                   fit: BoxFit.cover,
