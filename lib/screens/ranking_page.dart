@@ -88,7 +88,7 @@ class _RankingPageState extends State<RankingPage> {
           debugPrint('アップロード成功: $imgUrl');
 
           final response = await sendImageDataToBackend(sendImageUrl, widget.themeId);
-          debugPrint('response: ${response}');
+          debugPrint('response: $response');
           if (response != null) {
             if (!mounted) return;
             Navigator.push(
@@ -141,9 +141,7 @@ class _RankingPageState extends State<RankingPage> {
 
   // バックエンドに画像データを送信
   Future<Map<String, dynamic>?> sendImageDataToBackend(String imageUrl, int themeId) async {
-    print('ImageUrl: ${imageUrl}');
-    // final sendImageUrl = 'https://firebasestorage.googleapis.com/v0/b/clipit-2e405.firebasestorage.app/o/${imageUrl}?alt=media&token=5d165487-ce9b-45eb-b1f7-ec8c516c41d8' ;
-    
+  
     final uri = Uri.parse('https://clipit-backend.onrender.com/upload');
     try {
       final response = await http.post(
@@ -151,7 +149,7 @@ class _RankingPageState extends State<RankingPage> {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: {'img_url': imageUrl, 'theme_id': themeId.toString()},
       );
-      print('送信データ: ${jsonDecode(response.body)}');
+      debugPrint('送信データ: ${jsonDecode(response.body)}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
