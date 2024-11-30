@@ -1,9 +1,10 @@
 import 'dart:io';
+import 'package:clipit_front/models/result.dart';
 import 'package:flutter/material.dart';
 
-class ResultPage extends StatelessWidget {
-  final File image; // 選択した画像ファイル
-  final Map<String, dynamic>? serverResponse; // サーバーのレスポンス
+class ResultPage extends StatefulWidget {
+  final File image;
+  final Map<String, dynamic>? serverResponse;
 
   const ResultPage({
     super.key,
@@ -11,26 +12,28 @@ class ResultPage extends StatelessWidget {
     required this.serverResponse,
   });
 
-  // Future<void> fetchResult(int themeId) async {
-  //   final uri = Uri.parse('https://clipit-backend.onrender.com/ranking_$themeId'); // APIのURL
-  //   try {
-  //     final response = await http.get(uri);
-  //     if (response.statusCode == 200) {
-  //       final List<dynamic> body = jsonDecode(response.body)['results'];
-  //       setState(() {
-  //         ranking = body.map((json) => Ranking.fromJson(json)).toList();
-  //         isLoading = false;
-  //       });
-  //     } else {
-  //       throw Exception('ランキングデータの取得に失敗しました: ${response.statusCode}');
-  //     }
-  //   } catch (error) {
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //     debugPrint('Error fetching rankings: $error');
-  //   }
-  // }
+  @override
+  State<ResultPage> createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  List<Result> result = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // サーバーレスポンスがある場合、リストを更新
+    if (widget.serverResponse != null) {
+      if (widget.serverResponse!['results'] != null) {
+        result = (widget.serverResponse!['results'] as List<dynamic>)
+            .map((json) => Result.fromJson(json as Map<String, dynamic>))
+            .toList();
+      } else {
+        result = [Result.fromJson(widget.serverResponse!)];
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +44,22 @@ class ResultPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.file(image, width: 200, height: 200, fit: BoxFit.cover),
+            // 画像表示
+            Image.file(widget.image, width: 200, height: 200, fit: BoxFit.cover),
             const SizedBox(height: 20),
-            if (serverResponse != null)
-              Text('サーバーレスポンス: $serverResponse'),
+
+            // サーバーレスポンスの表示
+            if (result.isEmpty)
+              const Text('サーバーレスポンスがありません'),
+            if (result.isNotEmpty) ...[
+              const Text('Result!'),
+              for (final res in result) ...[
+                Text('一致度: ${res.similarity}%'),
+                Text('ランキング: ${res.rank}位'),
+                const SizedBox(height: 10),
+              ],
+            ],
+
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('戻る'),
