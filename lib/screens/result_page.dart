@@ -8,7 +8,7 @@ class ResultPage extends StatelessWidget {
   const ResultPage({
     super.key,
     required this.image,
-    this.serverResponse,
+    required this.serverResponse,
   });
 
   // Future<void> fetchResult(int themeId) async {
@@ -44,7 +44,7 @@ class ResultPage extends StatelessWidget {
             Image.file(image, width: 200, height: 200, fit: BoxFit.cover),
             const SizedBox(height: 20),
             if (serverResponse != null)
-              Text('サーバーレスポンス: ${serverResponse!['message']}'),
+              Text('サーバーレスポンス: $serverResponse'),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('戻る'),

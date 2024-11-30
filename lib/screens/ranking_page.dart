@@ -12,8 +12,13 @@ import 'package:image/image.dart' as img;
 
 class RankingPage extends StatefulWidget {
   final int themeId;
+  final String themeName;
 
-  const RankingPage({super.key, required this.themeId});
+  const RankingPage({
+    super.key,
+    required this.themeId,
+    required this.themeName
+  });
 
   @override
   State<RankingPage> createState() => _RankingPageState();
@@ -74,12 +79,22 @@ class _RankingPageState extends State<RankingPage> {
       try {
         final File file = File(_selectedImage!.path);
 
+        // final File resizedBytes = file;
+      
         await compressImage(file);
+
+        Uint8List resizedBytes = await file.readAsBytes();
 
         final int imageId = DateTime.now().millisecondsSinceEpoch;
         final String fileName = '$imageId.png';
+        
         final ref = _storage.ref().child(fileName);
-        final uploadFile = await ref.putFile(file);
+        final uploadFile = await ref.putData(
+          resizedBytes,
+          SettableMetadata(
+                  contentType: 'application/octet-stream', // 一般的なバイナリデータとして
+                ),
+        );
 
         final String sendImageUrl = await ref.getDownloadURL();
 
@@ -119,22 +134,18 @@ class _RankingPageState extends State<RankingPage> {
 
     if (image == null) {
       debugPrint("画像のデコードに失敗しました");
-      return;
+      return ;
     }
-    // 画像をリサイズ（オプション）
-    img.Image resizedImage = img.copyResize(image, width: 600);
 
-    // 画像をJPEG形式で圧縮（画質を80%に設定）
+    img.Image resizedImage = img.copyResize(image, width: 600);
     List<int> compressedImage = img.encodeJpg(resizedImage, quality: 30);
 
-    // 圧縮された画像を新しいファイルに保存
     File compressedFile = File('${file.parent.path}/compressed_${file.uri.pathSegments.last}');
     await compressedFile.writeAsBytes(compressedImage);
 
     setState(() {
       file = compressedFile;
     });
-
     // print('圧縮された画像の保存先: ${compressedFile.path}');
   }
 
@@ -199,7 +210,7 @@ class _RankingPageState extends State<RankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ranking')),
+      appBar: AppBar(title: Text(widget.themeName)),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(

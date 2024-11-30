@@ -29,7 +29,8 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
-        final List<dynamic> body = jsonDecode(response.body)['results'];
+        final decodedResponse = utf8.decode(response.bodyBytes);
+        final List<dynamic> body = jsonDecode(decodedResponse)['results'];
         debugPrint('response body: ${response.body}');
         setState(() {
           topics = body.map((json) => Topic.fromJson(json)).toList();
@@ -104,11 +105,16 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                RankingPage(themeId: filteredTopics[index].theme_id),
+                                RankingPage(
+                                  themeId: filteredTopics[index].theme_id,
+                                  themeName: filteredTopics[index].theme_name
+                                ),
                             )
                           );
                         },
-                        child: TopicContainer(topic: filteredTopics[index]),
+                        child: TopicContainer(
+                          topic: filteredTopics[index],
+                        ),
                       );
                     },
                   ),
