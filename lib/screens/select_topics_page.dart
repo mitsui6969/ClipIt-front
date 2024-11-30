@@ -30,6 +30,7 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         final List<dynamic> body = jsonDecode(response.body)['results'];
+        debugPrint('response body: ${response.body}');
         setState(() {
           topics = body.map((json) => Topic.fromJson(json)).toList();
           filteredTopics = topics;
@@ -39,7 +40,7 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
         throw Exception('お題データの取得に失敗しました: ${response.statusCode}');
       }
     } catch (error) {
-      debugPrint('Error fetching rankings: $error');
+      debugPrint('Error fetchingTopics: $error');
       setState(() {
         isLoading = false;
       });
