@@ -260,13 +260,13 @@ class _RankingPageState extends State<RankingPage> {
           ),
         ),
       ),
-      backgroundColor: const Color(0xFFFAB800), // 上部背景色をオレンジに設定
+      backgroundColor: const Color(0xFFFAB800),
       body: ClipRRect(
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(30), // 上部角を丸くする
+          top: Radius.circular(30),
         ),
         child: Container(
-          color: Colors.white, // 白い背景
+          color: Colors.white,
           child: isLoading
               ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
