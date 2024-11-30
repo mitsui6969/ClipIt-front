@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:clipit_front/screens/result_page.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:clipit_front/components/rank_container.dart';
 import 'package:clipit_front/models/ranking.dart';
+import 'package:image/image.dart' as img;
 
 class RankingPage extends StatefulWidget {
   final int themeId;
@@ -71,6 +73,9 @@ class _RankingPageState extends State<RankingPage> {
     if (_selectedImage != null) {
       try {
         final File file = File(_selectedImage!.path);
+
+        await compressImage(file);
+
         final int imageId = DateTime.now().millisecondsSinceEpoch;
         final String fileName = '$imageId.png';
         final ref = _storage.ref().child(fileName);
@@ -101,6 +106,35 @@ class _RankingPageState extends State<RankingPage> {
       }
     }
   }
+
+
+  // 画像圧縮
+  Future<void> compressImage(File file) async {
+    // 画像ファイルを読み込む
+    List<int> imageBytes = await file.readAsBytes();
+    img.Image? image = img.decodeImage(Uint8List.fromList(imageBytes));
+
+    if (image == null) {
+      debugPrint("画像のデコードに失敗しました");
+      return;
+    }
+    // 画像をリサイズ（オプション）
+    img.Image resizedImage = img.copyResize(image, width: 600);
+
+    // 画像をJPEG形式で圧縮（画質を80%に設定）
+    List<int> compressedImage = img.encodeJpg(resizedImage, quality: 30);
+
+    // 圧縮された画像を新しいファイルに保存
+    File compressedFile = File('${file.parent.path}/compressed_${file.uri.pathSegments.last}');
+    await compressedFile.writeAsBytes(compressedImage);
+
+    setState(() {
+      file = compressedFile;
+    });
+
+    // print('圧縮された画像の保存先: ${compressedFile.path}');
+  }
+
 
   // バックエンドに画像データを送信
   Future<Map<String, dynamic>?> sendImageDataToBackend(String imageUrl, int themeId) async {
