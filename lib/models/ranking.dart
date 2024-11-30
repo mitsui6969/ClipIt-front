@@ -7,6 +7,7 @@ class Ranking {
     required this.img_url,
     // required this.image_id,
     required this.theme_name,
+    required this.theme_id,
   });
 
   // プロパティ
@@ -15,6 +16,7 @@ class Ranking {
   final String? img_url;
   // final int image_id;
   final String theme_name;
+  final int theme_id;
 
   // JSONからRankingを生成するファクトリコンストラクタ
   factory Ranking.fromJson(dynamic json){
@@ -24,6 +26,7 @@ class Ranking {
       img_url: json['img-url'] as String?,
       // image_id: json['img_id'] as int,
       theme_name: json['theme_name'] as String,
+      theme_id: json['theme_id'] as int,
     );
   }
 }
