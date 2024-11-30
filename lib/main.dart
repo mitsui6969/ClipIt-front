@@ -1,7 +1,7 @@
 import 'package:clipit_front/firebase_options.dart';
+import 'package:clipit_front/screens/select_topics_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:clipit_front/components/footer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,17 +22,8 @@ class ClipItApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MainScreen(),
+      home: const SelectTopicsPage(),
       debugShowCheckedModeBanner: false,
     );
-  }
-}
-
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Footer();
   }
 }

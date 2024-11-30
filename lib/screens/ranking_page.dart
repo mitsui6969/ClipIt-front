@@ -28,7 +28,6 @@ class _RankingPageState extends State<RankingPage> {
   List<Ranking> ranking = [];
   bool isLoading = true;
   XFile? _selectedImage;
-  // int themeId = 1;
 
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
@@ -78,8 +77,6 @@ class _RankingPageState extends State<RankingPage> {
     if (_selectedImage != null) {
       try {
         final File file = File(_selectedImage!.path);
-
-        // final File resizedBytes = file;
       
         await compressImage(file);
 
@@ -128,7 +125,6 @@ class _RankingPageState extends State<RankingPage> {
 
   // 画像圧縮
   Future<void> compressImage(File file) async {
-    // 画像ファイルを読み込む
     List<int> imageBytes = await file.readAsBytes();
     img.Image? image = img.decodeImage(Uint8List.fromList(imageBytes));
 
@@ -137,8 +133,8 @@ class _RankingPageState extends State<RankingPage> {
       return ;
     }
 
-    img.Image resizedImage = img.copyResize(image, width: 600);
-    List<int> compressedImage = img.encodeJpg(resizedImage, quality: 30);
+    img.Image resizedImage = img.copyResize(image, width: 1042);
+    List<int> compressedImage = img.encodeJpg(resizedImage, quality: 80);
 
     File compressedFile = File('${file.parent.path}/compressed_${file.uri.pathSegments.last}');
     await compressedFile.writeAsBytes(compressedImage);
@@ -146,7 +142,6 @@ class _RankingPageState extends State<RankingPage> {
     setState(() {
       file = compressedFile;
     });
-    // print('圧縮された画像の保存先: ${compressedFile.path}');
   }
 
 
