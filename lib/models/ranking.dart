@@ -5,7 +5,6 @@ class Ranking {
     required this.similarity,
     required this.rank,
     required this.img_url,
-    // required this.image_id,
     required this.theme_name,
     required this.theme_id,
   });
@@ -14,7 +13,6 @@ class Ranking {
   final double similarity;
   final int rank;
   final String? img_url;
-  // final int image_id;
   final String theme_name;
   final int theme_id;
 
