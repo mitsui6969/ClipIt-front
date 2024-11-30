@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:clipit_front/screens/result_page.dart';
@@ -174,33 +175,72 @@ class _RankingPageState extends State<RankingPage> {
       showModalBottomSheet<void>(
         context: context,
         builder: (BuildContext context) {
-          return SizedBox(
-            height: 600,
-            child: Column(
-              children: [
-                Image.file(
-                  File(_selectedImage!.path),
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.cover,
+          bool isUploading = false;
+
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter modalSetState) {
+              return SizedBox(
+                height: 600,
+                child: Column(
+                  children: [
+                    // 画像のプレビュー
+                    Image.file(
+                      File(_selectedImage!.path),
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // 結果を見るボタン
+                    ElevatedButton(
+                      onPressed: isUploading
+                          ? null
+                          : () async {
+                              modalSetState(() {
+                                isUploading = true; // ローディング開始
+                              });
+
+                              await uploadImage();
+
+                              modalSetState(() {
+                                isUploading = false; // ローディング終了
+                              });
+                            },
+                      child: isUploading
+                          ? const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text("処理中..."),
+                              ],
+                            )
+                          : const Text("結果を見る"),
+                    ),
+
+                    // 閉じるボタン
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("閉じる"),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 20),
-                Text('ファイル名: ${_selectedImage!.name}'),
-                ElevatedButton(
-                  onPressed: uploadImage,
-                  child: const Text("結果を見る"),
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("閉じる"),
-                ),
-              ],
-            ),
+              );
+            },
           );
         },
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
