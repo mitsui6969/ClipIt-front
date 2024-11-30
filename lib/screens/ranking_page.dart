@@ -79,12 +79,22 @@ class _RankingPageState extends State<RankingPage> {
       try {
         final File file = File(_selectedImage!.path);
 
+        // final File resizedBytes = file;
+      
         await compressImage(file);
+
+        Uint8List resizedBytes = await file.readAsBytes();
 
         final int imageId = DateTime.now().millisecondsSinceEpoch;
         final String fileName = '$imageId.png';
+        
         final ref = _storage.ref().child(fileName);
-        final uploadFile = await ref.putFile(file);
+        final uploadFile = await ref.putData(
+          resizedBytes,
+          SettableMetadata(
+                  contentType: 'application/octet-stream', // 一般的なバイナリデータとして
+                ),
+        );
 
         final String sendImageUrl = await ref.getDownloadURL();
 
@@ -124,7 +134,7 @@ class _RankingPageState extends State<RankingPage> {
 
     if (image == null) {
       debugPrint("画像のデコードに失敗しました");
-      return;
+      return ;
     }
 
     img.Image resizedImage = img.copyResize(image, width: 600);
@@ -132,10 +142,14 @@ class _RankingPageState extends State<RankingPage> {
 
     File compressedFile = File('${file.parent.path}/compressed_${file.uri.pathSegments.last}');
     await compressedFile.writeAsBytes(compressedImage);
+    
+    final List<int> resizedBytes = img.encodeBmp(resizedImage);
+    final Uint8List resizedUint8List = Uint8List.fromList(resizedBytes);
 
     setState(() {
       file = compressedFile;
     });
+
     // print('圧縮された画像の保存先: ${compressedFile.path}');
   }
 
@@ -156,6 +170,7 @@ class _RankingPageState extends State<RankingPage> {
         return jsonDecode(response.body);
       } else {
         throw Exception('バックエンド通信中にエラーが発生しました: ${response.statusCode}');
+        debugPrint('エラー詳細: ${response.statusCode}, ${response.body}');
       }
     } catch (e) {
       debugPrint('バックエンド送信エラー: $e');

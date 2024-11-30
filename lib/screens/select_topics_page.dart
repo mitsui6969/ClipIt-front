@@ -112,7 +112,9 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
                             )
                           );
                         },
-                        child: TopicContainer(topic: filteredTopics[index]),
+                        child: TopicContainer(
+                          topic: filteredTopics[index],
+                        ),
                       );
                     },
                   ),

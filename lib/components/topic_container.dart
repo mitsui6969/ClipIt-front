@@ -17,9 +17,9 @@ class TopicContainer extends StatelessWidget {
         horizontal: 16,
       ),
       child: Container(
-        height: 210,
+        height: 220,
         decoration: const BoxDecoration(
-          color: Color(0xFF6cb1c9),
+          color: Color(0xFFf0f0f0),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
@@ -29,14 +29,14 @@ class TopicContainer extends StatelessWidget {
           children: [
             // お題
             Container(
-              height: 40,
+              height: 50,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(
                 vertical: 10,
                 horizontal: 15
               ),
               decoration: const BoxDecoration(
-                color: Color(0xFFf0f0f0),
+                color: Color(0xFFFAB800),
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(5),
                 ),
@@ -54,14 +54,18 @@ class TopicContainer extends StatelessWidget {
               ),
               child: ClipRRect(
                 child: Image.network(
-                  topic.img_url,
+                  topic.image_url,
                   fit: BoxFit.cover,
                   width: double.infinity,
+                  color: Colors.black.withOpacity(0.3),
+                  colorBlendMode: BlendMode.darken,
                   errorBuilder: (context, error, stackTrace) {
                     return Image.asset(
                       'images/image.png',
                       fit: BoxFit.cover,
                       width: double.infinity,
+                      color: Colors.black.withOpacity(0.2),
+                      colorBlendMode: BlendMode.darken,
                     );
                   },
                 ),

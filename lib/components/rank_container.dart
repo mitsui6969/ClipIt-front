@@ -17,13 +17,13 @@ class RankContainer extends StatelessWidget {
         horizontal: 16,
       ),
       child: Container(
-        height: 200,
+        height: 250,
         padding: const EdgeInsets.symmetric(
           vertical: 0,
           horizontal: 20,
         ),
         decoration: const BoxDecoration(
-          color: Color(0xFF6cb1c9),
+          // color: Color(0xFF6cb1c9),
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
@@ -39,7 +39,7 @@ class RankContainer extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFf0f0f0)
+                    color: Color(0xFF000000)
                   ),
                 ),
                 Text(
@@ -47,17 +47,17 @@ class RankContainer extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFf0f0f0)
+                    color: Color(0xFF000000)
                   ),
                 )
               ],
             ),
             // 画像部分
             Container(
-              height: 170,
-              // padding: const EdgeInsets.symmetric(
-              //   vertical: 80,
-              // ),
+              height: 180,
+              padding: const EdgeInsets.symmetric(
+                vertical: 80,
+              ),
               decoration: BoxDecoration(
                 // color: const Color(0xffffffff),
                 borderRadius: const BorderRadius.all(
