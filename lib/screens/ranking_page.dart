@@ -244,19 +244,44 @@ class _RankingPageState extends State<RankingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.themeName)),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: ranking.length,
-              itemBuilder: (context, index) {
-                return RankContainer(ranking: ranking[index]);
-              },
-            ),
+      appBar: AppBar(
+        toolbarHeight: 60,
+        title: const Text(
+          'Select Topics',
+          style: TextStyle(
+            color: Color(0xffffffff),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFFAB800),
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFFFAB800), // 上部背景色をオレンジに設定
+      body: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(30), // 上部角を丸くする
+        ),
+        child: Container(
+          color: Colors.white, // 白い背景
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: ranking.length,
+                  itemBuilder: (context, index) {
+                    return RankContainer(ranking: ranking[index]);
+                  },
+                ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _selectImage,
         child: const Icon(Icons.upload_file),
       ),
     );
   }
+
 }
