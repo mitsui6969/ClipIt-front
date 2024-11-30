@@ -270,9 +270,22 @@ class _RankingPageState extends State<RankingPage> {
           child: isLoading
               ? const Center(child: CircularProgressIndicator())
               : ListView.builder(
-                  itemCount: ranking.length,
+                  itemCount: ranking.length * 2 - 1,
                   itemBuilder: (context, index) {
-                    return RankContainer(ranking: ranking[index]);
+
+                    // 線引く
+                    if (index.isOdd) {
+                    return const Divider(
+                      height: 1,
+                      thickness: 1,
+                      // indent: 30,
+                      // endIndent: 30,
+                      color: Colors.grey,
+                    );
+                  } else {
+                    int rankIndex = index ~/ 2; // 奇数のインデックスはDividerなので、偶数インデックスにランキングを設定
+                    return RankContainer(ranking: ranking[rankIndex]);
+                  }
                   },
                 ),
         ),
