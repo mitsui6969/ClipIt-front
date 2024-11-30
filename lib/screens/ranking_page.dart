@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:clipit_front/components/rank_container.dart';
 import 'package:clipit_front/models/ranking.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 
 class RankingPage extends StatefulWidget {
@@ -78,11 +77,7 @@ class _RankingPageState extends State<RankingPage> {
         await compressImage(file);
 
         final int imageId = DateTime.now().millisecondsSinceEpoch;
-        // final String pngOrJpg = file.path.split('.').last; 
-        // final String imageId = base64Url.encode(utf8.encode(DateTime.now().millisecondsSinceEpoch.toString()));
-        debugPrint('File: ${file}');
         final String fileName = '$imageId.png';
-        debugPrint('fileName: ${fileName}');
         final ref = _storage.ref().child(fileName);
         final uploadFile = await ref.putFile(file);
 
@@ -120,7 +115,7 @@ class _RankingPageState extends State<RankingPage> {
     img.Image? image = img.decodeImage(Uint8List.fromList(imageBytes));
 
     if (image == null) {
-      print("画像のデコードに失敗しました");
+      debugPrint("画像のデコードに失敗しました");
       return;
     }
     // 画像をリサイズ（オプション）
@@ -136,8 +131,8 @@ class _RankingPageState extends State<RankingPage> {
     setState(() {
       file = compressedFile;
     });
-    
-    print('圧縮された画像の保存先: ${compressedFile.path}');
+
+    // print('圧縮された画像の保存先: ${compressedFile.path}');
   }
 
 
