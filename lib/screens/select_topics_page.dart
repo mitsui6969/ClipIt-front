@@ -68,7 +68,14 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
       // title
       appBar: AppBar(
         toolbarHeight: 60,
-        title: const Text('Select Topics'),
+        title: const Text(
+          'Select Topics',
+          style: TextStyle(
+            color: Color(0xffffffff),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             color: Color(0xFFFAB800),
@@ -89,7 +96,7 @@ class _SelectTopicsPageState extends State<SelectTopicsPage> {
               // 検索ボックス
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  vertical: 20,
+                  vertical: 22,
                   horizontal: 36,
                 ),
                 child: TextField(
