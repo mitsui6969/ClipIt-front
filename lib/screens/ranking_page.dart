@@ -81,11 +81,14 @@ class _RankingPageState extends State<RankingPage> {
         final ref = _storage.ref().child(fileName);
         final uploadFile = await ref.putFile(file);
 
+        final String sendImageUrl = await ref.getDownloadURL();
+
         if (uploadFile.state == TaskState.success) {
           final imgUrl = await ref.getDownloadURL();
           debugPrint('アップロード成功: $imgUrl');
 
-          final response = await sendImageDataToBackend(fileName, widget.themeId);
+          final response = await sendImageDataToBackend(sendImageUrl, widget.themeId);
+          debugPrint('response: $response');
           if (response != null) {
             if (!mounted) return;
             Navigator.push(
@@ -138,14 +141,15 @@ class _RankingPageState extends State<RankingPage> {
 
   // バックエンドに画像データを送信
   Future<Map<String, dynamic>?> sendImageDataToBackend(String imageUrl, int themeId) async {
+  
     final uri = Uri.parse('https://clipit-backend.onrender.com/upload');
     try {
       final response = await http.post(
         uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'image_url': imageUrl, 'theme_id': themeId}),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: {'img_url': imageUrl, 'theme_id': themeId.toString()},
       );
-      // print('送信データ: ${jsonDecode(response.body)}');
+      debugPrint('送信データ: ${jsonDecode(response.body)}');
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -153,7 +157,7 @@ class _RankingPageState extends State<RankingPage> {
         throw Exception('バックエンド通信中にエラーが発生しました: ${response.statusCode}');
       }
     } catch (e) {
-      debugPrint('エラー: $e');
+      debugPrint('バックエンド送信エラー: $e');
       return null;
     }
   }
