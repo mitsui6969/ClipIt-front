@@ -173,12 +173,14 @@ class _RankingPageState extends State<RankingPage> {
     if (_selectedImage != null) {
       showModalBottomSheet<void>(
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
           bool isUploading = false;
 
           return StatefulBuilder(
             builder: (BuildContext context, StateSetter modalSetState) {
               return Container(
+                height: MediaQuery.of(context).size.height * 0.9,
                 width: double.infinity,
                 color: const Color(0xff64C5D3),
                 padding: EdgeInsets.only(top: 50),
@@ -194,7 +196,8 @@ class _RankingPageState extends State<RankingPage> {
                       // 画像のプレビュー
                       ConstrainedBox(
                         constraints: const BoxConstraints(
-
+                          minWidth: 70,
+                          minHeight: 70,
                           maxWidth: 500,
                           maxHeight: 500
                         ),
