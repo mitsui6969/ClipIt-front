@@ -94,8 +94,22 @@ class _ResultPageState extends State<ResultPage> {
                     if (result.isNotEmpty) ...[
                       const Text('Result!'),
                       for (final res in result) ...[
-                        Text('一致度: ${res.similarity}%'),
-                        Text('ランキング: ${res.rank}位'),
+                        Text(
+                          '一致度: ${res.similarity}%',
+                          style: const TextStyle(
+                            color: Color(0xff212227),
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
+                        Text(
+                          'ランキング: ${res.rank}位',
+                          style: const TextStyle(
+                            color: Color(0xff212227),
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          )
+                        ),
                         const SizedBox(height: 10),
                       ],
                     ],
