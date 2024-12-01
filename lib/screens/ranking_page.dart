@@ -178,60 +178,79 @@ class _RankingPageState extends State<RankingPage> {
 
           return StatefulBuilder(
             builder: (BuildContext context, StateSetter modalSetState) {
-              return SizedBox(
-                height: 600,
-                child: Column(
-                  children: [
-                    // 画像のプレビュー
-                    Image.file(
-                      File(_selectedImage!.path),
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 20),
+              return Container(
+                width: double.infinity,
+                color: const Color(0xff64C5D3),
+                padding: EdgeInsets.only(top: 50),
+                
+                // 白いとこ
+                child: Container(
+                  width: double.infinity,
+                  color: const Color(0xffffffff),
+                  
+                  child: FractionallySizedBox(
+                    child: Column(
+                    children: [
+                      // 画像のプレビュー
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
 
-                    // 結果を見るボタン
-                    ElevatedButton(
-                      onPressed: isUploading
-                          ? null
-                          : () async {
-                              modalSetState(() {
-                                isUploading = true; // ローディング開始
-                              });
+                          maxWidth: 500,
+                          maxHeight: 500
+                        ),
 
-                              await uploadImage();
+                        child: Image.file(
+                          File(_selectedImage!.path),
+                          
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      
 
-                              modalSetState(() {
-                                isUploading = false; // ローディング終了
-                              });
-                            },
-                      child: isUploading
-                          ? const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.0,
-                                    color: Colors.white,
+                      // 結果を見るボタン
+                      ElevatedButton(
+                        onPressed: isUploading
+                            ? null
+                            : () async {
+                                modalSetState(() {
+                                  isUploading = true; // ローディング開始
+                                });
+
+                                await uploadImage();
+
+                                modalSetState(() {
+                                  isUploading = false; // ローディング終了
+                                });
+                              },
+                        child: isUploading
+                            ? const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.0,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 10),
-                                Text("処理中..."),
-                              ],
-                            )
-                          : const Text("結果を見る"),
-                    ),
+                                  SizedBox(width: 10),
+                                  Text("処理中..."),
+                                ],
+                              )
+                            : const Text("結果を見る"),
+                      ),
 
-                    // 閉じるボタン
-                    ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text("閉じる"),
-                    ),
-                  ],
-                ),
+                      // 閉じるボタン
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("閉じる"),
+                      ),
+                    ],
+                  ),
+                  )
+                  
+                  )               
               );
             },
           );
