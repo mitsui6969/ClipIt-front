@@ -308,7 +308,6 @@ class _RankingPageState extends State<RankingPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

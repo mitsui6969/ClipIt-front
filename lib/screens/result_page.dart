@@ -71,13 +71,22 @@ class _ResultPageState extends State<ResultPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // 画像表示
-                    Image.file(
-                      widget.image,
-                      width: 500,
-                      height: 500,
-                      fit: BoxFit.cover,
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 70,
+                        minHeight: 70,
+                        maxWidth: 350,
+                        maxHeight: 400
+                      ),
+                            
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.file(
+                          widget.image,
+                          fit: BoxFit.cover,               
+                        ),
+                      ),                            
                     ),
-                    const SizedBox(height: 20),
 
                     // サーバーレスポンスの表示
                     if (result.isEmpty)
