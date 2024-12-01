@@ -38,33 +38,77 @@ class _ResultPageState extends State<ResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Result Page')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // 画像表示
-            Image.file(widget.image, width: 200, height: 200, fit: BoxFit.cover),
-            const SizedBox(height: 20),
+      // appBar: AppBar(title: const Text('Result Page')),
+      appBar: AppBar(
+        toolbarHeight: 60,
+        title: const Text(
+          '結果',
+          style: TextStyle(
+            color: Color(0xffffffff),
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            color: Color(0xFFFAB800),
+          ),
+        ),
+      ),
+      backgroundColor: const Color(0xFFFAB800),
+      body: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+        child: Container(
+          width: double.infinity,
+          color: const Color(0xFFffffff),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // 画像表示
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 70,
+                        minHeight: 70,
+                        maxWidth: 350,
+                        maxHeight: 400
+                      ),
+                            
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.file(
+                          widget.image,
+                          fit: BoxFit.cover,               
+                        ),
+                      ),                            
+                    ),
 
-            // サーバーレスポンスの表示
-            if (result.isEmpty)
-              const Text('サーバーレスポンスがありません'),
-            if (result.isNotEmpty) ...[
-              const Text('Result!'),
-              for (final res in result) ...[
-                Text('一致度: ${res.similarity}%'),
-                Text('ランキング: ${res.rank}位'),
-                const SizedBox(height: 10),
-              ],
+                    // サーバーレスポンスの表示
+                    if (result.isEmpty)
+                      const Text('サーバーレスポンスがありません'),
+                    if (result.isNotEmpty) ...[
+                      const Text('Result!'),
+                      for (final res in result) ...[
+                        Text('一致度: ${res.similarity}%'),
+                        Text('ランキング: ${res.rank}位'),
+                        const SizedBox(height: 10),
+                      ],
+                    ],
+
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('戻る'),
+                    ),
+                  ],
+                ),
+              ),
             ],
-
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('戻る'),
-            ),
-          ],
+          ),
         ),
       ),
     );

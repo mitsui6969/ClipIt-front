@@ -13,7 +13,7 @@ class RankContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 30,
+        vertical: 20,
         horizontal: 25,
       ),
       child: Container(
@@ -32,7 +32,7 @@ class RankContainer extends StatelessWidget {
             // 文字部分
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 20,
+                horizontal: 10,
                 vertical: 10
               ),
               child: Row(
@@ -62,7 +62,7 @@ class RankContainer extends StatelessWidget {
           
             // 画像部分
             AspectRatio(
-              aspectRatio: 16 / 9,
+              aspectRatio: 4 / 3,
               child:  Container(
                 // height: 180,
                 padding: const EdgeInsets.symmetric(

@@ -173,65 +173,133 @@ class _RankingPageState extends State<RankingPage> {
     if (_selectedImage != null) {
       showModalBottomSheet<void>(
         context: context,
+        isScrollControlled: true,
         builder: (BuildContext context) {
           bool isUploading = false;
 
           return StatefulBuilder(
             builder: (BuildContext context, StateSetter modalSetState) {
-              return SizedBox(
-                height: 600,
-                child: Column(
-                  children: [
-                    // 画像のプレビュー
-                    Image.file(
-                      File(_selectedImage!.path),
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 20),
+              return Container(
+                height: MediaQuery.of(context).size.height * 0.9,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Color(0xff64C5D3),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
+                ),
+                padding: const EdgeInsets.only(top: 70),
+                
+                // 白いとこ
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
+                  
+                  child: FractionallySizedBox(
+                    child: Container (
+                      width: double.infinity,
+                      color: const Color(0xffffffff),
 
-                    // 結果を見るボタン
-                    ElevatedButton(
-                      onPressed: isUploading
-                          ? null
-                          : () async {
-                              modalSetState(() {
-                                isUploading = true; // ローディング開始
-                              });
+                      child: Column(
+                        children: [
+                          // 画像のプレビュー
+                          const Padding(padding: EdgeInsets.symmetric(vertical: 25),),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minWidth: 70,
+                              minHeight: 70,
+                              maxWidth: 350,
+                              maxHeight: 400
+                            ),
+                            
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                File(_selectedImage!.path),
+                                fit: BoxFit.cover,               
+                              ),
+                            ),                            
+                          ),
+                          
 
-                              await uploadImage();
-
-                              modalSetState(() {
-                                isUploading = false; // ローディング終了
-                              });
-                            },
-                      child: isUploading
-                          ? const Row(
-                              mainAxisSize: MainAxisSize.min,
+                          // ボタン
+                          const Spacer(), // ボタンを下に寄せる
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch, // ボタンの幅を親に揃える
                               children: [
+                                // 結果を見るボタン
                                 SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.0,
-                                    color: Colors.white,
+                                  width: double.infinity, // 横幅を最大に設定
+                                  height: 50, // 縦幅を指定
+                                  child: ElevatedButton(
+                                    onPressed: isUploading
+                                        ? null
+                                        : () async {
+                                            modalSetState(() {
+                                              isUploading = true; // ローディング開始
+                                            });
+
+                                            await uploadImage();
+
+                                            modalSetState(() {
+                                              isUploading = false; // ローディング終了
+                                            });
+                                          },
+                                    child: isUploading
+                                        ? const Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              SizedBox(
+                                                width: 16,
+                                                height: 16,
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 2.0,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text("処理中..."),
+                                            ],
+                                          )
+                                        : const Text("結果を見る"),
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                Text("処理中..."),
-                              ],
-                            )
-                          : const Text("結果を見る"),
-                    ),
+                                const SizedBox(height: 10), // ボタン間の間隔
 
-                    // 閉じるボタン
-                    ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text("閉じる"),
+                                // 別の画像を選ぶボタン
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    onPressed: _selectImage,
+                                    child: const Text("別の画像をアップロード"),
+                                  ),
+                                ),
+                                const SizedBox(height: 10), // ボタン間の間隔
+
+                                // 閉じるボタン
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("閉じる"),
+                                  ),
+                                ),
+                                const SizedBox(height: 40,), // 下部のスペース
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                    
+                  )
+                  
+                  )               
               );
             },
           );
@@ -239,7 +307,6 @@ class _RankingPageState extends State<RankingPage> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
