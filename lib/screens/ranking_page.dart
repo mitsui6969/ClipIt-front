@@ -182,78 +182,93 @@ class _RankingPageState extends State<RankingPage> {
               return Container(
                 height: MediaQuery.of(context).size.height * 0.9,
                 width: double.infinity,
-                color: const Color(0xff64C5D3),
-                padding: EdgeInsets.only(top: 50),
+                decoration: const BoxDecoration(
+                  color: Color(0xff64C5D3),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
+                ),
+                padding: EdgeInsets.only(top: 70),
                 
                 // 白いとこ
-                child: Container(
-                  width: double.infinity,
-                  color: const Color(0xffffffff),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(30),
+                  ),
                   
                   child: FractionallySizedBox(
-                    child: Column(
-                    children: [
-                      // 画像のプレビュー
-                      const Padding(padding: EdgeInsets.all(10),),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 70,
-                          minHeight: 70,
-                          maxWidth: 350,
-                          maxHeight: 500
-                        ),
-                        
-                        child: Image.file(
-                          File(_selectedImage!.path),
-                          fit: BoxFit.cover,               
-                        ),
+                    child: Container (
+                      width: double.infinity,
+                      color: const Color(0xffffffff),
+
+                      child: Column(
+                        children: [
+                          // 画像のプレビュー
+                          const Padding(padding: EdgeInsets.symmetric(vertical: 25),),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              minWidth: 70,
+                              minHeight: 70,
+                              maxWidth: 350,
+                              maxHeight: 500
+                            ),
+                            
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.file(
+                                File(_selectedImage!.path),
+                                fit: BoxFit.cover,               
+                              ),
+                            ),                            
+                          ),
+                          
+
+                          // 結果を見るボタン
+                          ElevatedButton(
+                            onPressed: isUploading
+                                ? null
+                                : () async {
+                                    modalSetState(() {
+                                      isUploading = true; // ローディング開始
+                                    });
+
+                                    await uploadImage();
+
+                                    modalSetState(() {
+                                      isUploading = false; // ローディング終了
+                                    });
+                                  },
+                            child: isUploading
+                                ? const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.0,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text("処理中..."),
+                                    ],
+                                  )
+                                : const Text("結果を見る"),
+                          ),
+
+                          // 別の画像を選ぶボタン
+
+
+                          // 閉じるボタン
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("閉じる"),
+                          ),
+                        ],
                       ),
-                      
-
-                      // 結果を見るボタン
-                      ElevatedButton(
-                        onPressed: isUploading
-                            ? null
-                            : () async {
-                                modalSetState(() {
-                                  isUploading = true; // ローディング開始
-                                });
-
-                                await uploadImage();
-
-                                modalSetState(() {
-                                  isUploading = false; // ローディング終了
-                                });
-                              },
-                        child: isUploading
-                            ? const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text("処理中..."),
-                                ],
-                              )
-                            : const Text("結果を見る"),
-                      ),
-
-                      // 別の画像を選ぶボタン
-
-
-                      // 閉じるボタン
-                      ElevatedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text("閉じる"),
-                      ),
-                    ],
-                  ),
+                    ),
+                    
                   )
                   
                   )               
