@@ -103,6 +103,10 @@ class _RankingPageState extends State<RankingPage> {
           debugPrint('response: $response');
           if (response != null) {
             if (!mounted) return;
+
+            Navigator.pop(context);
+
+            // 結果ページへ遷移
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -180,7 +184,7 @@ class _RankingPageState extends State<RankingPage> {
           return StatefulBuilder(
             builder: (BuildContext context, StateSetter modalSetState) {
               return Container(
-                height: MediaQuery.of(context).size.height * 0.9,
+                height: MediaQuery.of(context).size.height * 0.8,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Color(0xff64C5D3),
@@ -188,7 +192,7 @@ class _RankingPageState extends State<RankingPage> {
                     top: Radius.circular(30),
                   ),
                 ),
-                padding: const EdgeInsets.only(top: 70),
+                padding: const EdgeInsets.only(top: 45),
                 
                 // 白いとこ
                 child: ClipRRect(
@@ -210,7 +214,7 @@ class _RankingPageState extends State<RankingPage> {
                               minWidth: 70,
                               minHeight: 70,
                               maxWidth: 350,
-                              maxHeight: 400
+                              maxHeight: 350
                             ),
                             
                             child: ClipRRect(
@@ -232,8 +236,8 @@ class _RankingPageState extends State<RankingPage> {
                               children: [
                                 // 結果を見るボタン
                                 SizedBox(
-                                  width: double.infinity, // 横幅を最大に設定
-                                  height: 50, // 縦幅を指定
+                                  width: double.infinity,
+                                  height: 50,
                                   child: ElevatedButton(
                                     onPressed: isUploading
                                         ? null
@@ -248,6 +252,14 @@ class _RankingPageState extends State<RankingPage> {
                                               isUploading = false; // ローディング終了
                                             });
                                           },
+
+                                          // ボタンのスタイル
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(0xFFFAB800),
+                                            foregroundColor: const Color(0xff000000),
+                                            side: const BorderSide(color: Colors.black, width: 2),
+                                          ),
+
                                     child: isUploading
                                         ? const Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -275,6 +287,12 @@ class _RankingPageState extends State<RankingPage> {
                                   height: 50,
                                   child: ElevatedButton(
                                     onPressed: _selectImage,
+                                    // ボタンのスタイル
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF64C5D3), 
+                                      foregroundColor: const Color(0xff000000),
+                                      side: const BorderSide(color: Colors.black, width: 2),
+                                          ),
                                     child: const Text("別の画像をアップロード"),
                                   ),
                                 ),
@@ -286,6 +304,12 @@ class _RankingPageState extends State<RankingPage> {
                                   height: 50,
                                   child: ElevatedButton(
                                     onPressed: () => Navigator.pop(context),
+                                    // ボタンのスタイル
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xffffffff),
+                                      foregroundColor: const Color(0xff000000),
+                                      side: const BorderSide(color: Color(0xFF64C5D3), width: 2),
+                                          ),
                                     child: const Text("閉じる"),
                                   ),
                                 ),
@@ -314,7 +338,7 @@ class _RankingPageState extends State<RankingPage> {
       appBar: AppBar(
         toolbarHeight: 60,
         title: const Text(
-          'Select Topics',
+          'themeName',
           style: TextStyle(
             color: Color(0xffffffff),
             fontSize: 30,
@@ -345,8 +369,6 @@ class _RankingPageState extends State<RankingPage> {
                     return const Divider(
                       height: 1,
                       thickness: 1,
-                      // indent: 30,
-                      // endIndent: 30,
                       color: Colors.grey,
                     );
                   } else {
