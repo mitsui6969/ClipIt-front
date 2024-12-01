@@ -194,18 +194,18 @@ class _RankingPageState extends State<RankingPage> {
                     child: Column(
                     children: [
                       // 画像のプレビュー
+                      const Padding(padding: EdgeInsets.all(10),),
                       ConstrainedBox(
                         constraints: const BoxConstraints(
                           minWidth: 70,
                           minHeight: 70,
-                          maxWidth: 500,
+                          maxWidth: 350,
                           maxHeight: 500
                         ),
-
+                        
                         child: Image.file(
                           File(_selectedImage!.path),
-                          
-                          fit: BoxFit.cover,
+                          fit: BoxFit.cover,               
                         ),
                       ),
                       
@@ -243,6 +243,9 @@ class _RankingPageState extends State<RankingPage> {
                               )
                             : const Text("結果を見る"),
                       ),
+
+                      // 別の画像を選ぶボタン
+
 
                       // 閉じるボタン
                       ElevatedButton(
