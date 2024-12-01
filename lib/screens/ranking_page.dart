@@ -188,7 +188,7 @@ class _RankingPageState extends State<RankingPage> {
                     top: Radius.circular(30),
                   ),
                 ),
-                padding: EdgeInsets.only(top: 70),
+                padding: const EdgeInsets.only(top: 70),
                 
                 // 白いとこ
                 child: ClipRRect(
